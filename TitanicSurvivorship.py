@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sbn
 import matplotlib.pyplot as plt
+
 ##grabs the training and test dataset using the pandas readcsv function
 training = pd.read_csv('/Users/joshuamendiola/Desktop/Data Science Practice/Datasets/train.csv')
 testing = pd.read_csv('/Users/joshuamendiola/Desktop/Data Science Practice/Datasets/test.csv')
@@ -34,4 +35,37 @@ training_alph = training[['Survived','Pclass','Sex','Ticket','Cabin','Embarked']
 #     plt.title("Training Statistics for " + i)
 #     plt.show()
 
-sbn.heatmap(training_num)
+##creates a heatmap of the numeric data
+# sbn.heatmap(training_num.corr())
+# plt.show()
+
+##creates a pivot table of the training table using survival as the index
+# print(pd.pivot_table(training, index = 'Survived', values = ['Age','SibSp','Parch','Fare']))
+
+##creates barplots of the amount of people from each group
+# for i in training_alph.columns:
+#     sbn.barplot(training_alph[i].value_counts().index,training_alph[i].value_counts()).set_title(i)
+#     plt.show()
+
+
+## creates pivot tables using survival as an index, comparing class, sex, and embarking location
+# print(pd.pivot_table(training, index = 'Survived', columns = 'Pclass',
+#                      values = 'Ticket' ,aggfunc ='count'))
+# print("\n")
+
+# print(pd.pivot_table(training, index = 'Survived', columns = 'Sex', 
+#                      values = 'Ticket' ,aggfunc ='count'))
+# print("\n")
+
+# print(pd.pivot_table(training, index = 'Survived', columns = 'Embarked', 
+#                      values = 'Ticket' ,aggfunc ='count'))
+# print("\n")
+
+##uses a lamda expression to create a new column in the training set, that counts how many cabins a passenger owned
+##if the value is not a number, it sets it to 0, if there is multiple, it adds a split
+training['cabin_multiple'] = training.Cabin.apply(lambda x: 0 if pd.isna(x) 
+                                                    else len(x.split(' ')))
+# print(training['cabin_multiple'].value_counts())
+
+print(pd.pivot_table(training, index = 'Survived', columns = 'cabin_multiple',
+               values = 'Ticket' ,aggfunc ='count'))
