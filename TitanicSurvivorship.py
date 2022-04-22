@@ -67,5 +67,16 @@ training['cabin_multiple'] = training.Cabin.apply(lambda x: 0 if pd.isna(x)
                                                     else len(x.split(' ')))
 # print(training['cabin_multiple'].value_counts())
 
-print(pd.pivot_table(training, index = 'Survived', columns = 'cabin_multiple',
-               values = 'Ticket' ,aggfunc ='count'))
+# print(pd.pivot_table(training, index = 'Survived', columns = 'cabin_multiple',
+#                values = 'Ticket' ,aggfunc ='count'))
+
+# n stands for null
+# in this case we will treat null values like it's own category
+training['cabin_adv'] = training.Cabin.apply(lambda x: str(x)[0])
+
+#comparing survival rates by cabin
+#print(training.cabin_adv)
+#print(pd.pivot_table(training,index='Survived',columns='cabin_adv', values = 'Name', aggfunc='count'))
+
+training['numeric_ticket'] = training.Ticket.apply(lambda x: 1 if x.isnumeric() else 0)
+training['ticket_letters'] = training.Ticket.apply(lambda x: ''.join(x.split(' ')[:-1]).replace('.','').replace('/','').lower() if len(x.split(' ')[:-1]) >0 else 0)
