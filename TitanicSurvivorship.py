@@ -80,3 +80,7 @@ training['cabin_adv'] = training.Cabin.apply(lambda x: str(x)[0])
 
 training['numeric_ticket'] = training.Ticket.apply(lambda x: 1 if x.isnumeric() else 0)
 training['ticket_letters'] = training.Ticket.apply(lambda x: ''.join(x.split(' ')[:-1]).replace('.','').replace('/','').lower() if len(x.split(' ')[:-1]) >0 else 0)
+
+training.Name.head(50)
+training['name_title'] = training.Name.apply(lambda x: x.split(',')[1].split('.')[0].strip())
+print(training['name_title'].value_counts())
